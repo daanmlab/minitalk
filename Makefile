@@ -5,40 +5,51 @@
 #                                                     +:+ +:+         +:+      #
 #    By: dabalm <dabalm@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/11/02 12:29:54 by dabalm            #+#    #+#              #
-#    Updated: 2023/11/02 13:06:56 by dabalm           ###   ########.fr        #
+#    Created: 2023/11/11 20:51:27 by dabalm            #+#    #+#              #
+#    Updated: 2023/11/14 21:05:19 by dabalm           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-MAIN_CLIENT=./client.c
-MAIN_SERVER=./server.c
-NAME_CLIENT=client
-NAME_SERVER=server
+NAME_CLIENT = client
+NAME_SERVER = server
+
+SRC_CLIENT = client.c
+SRC_SERVER = server.c
 
 LIBFT = libft/libft.a
 
-CC = CC
+CC = cc
+
 CFLAGS = -Wall -Wextra -Werror -g
 
+all : $(NAME_CLIENT) $(NAME_SERVER)
 
-.PHONY : server client
+bonus : $(NAME_BONUS)
 
-$(NAME_CLIENT) : $(MAIN_CLIENT)
-	$(MAKE) -sC ./libft
-	@$(CC) $(CFLAGS) $(MAIN_CLIENT) $(LIBFT) -o $(NAME_CLIENT)
+$(NAME_CLIENT): $(SRC_CLIENT)
+	@$(MAKE) -sC ./libft
+	@echo "Creating $(NAME_CLIENT)"
+	@$(CC) $(CFLAGS) $(SRC_CLIENT) $(LIBFT) -o $(NAME_CLIENT)
 	
-$(NAME_SERVER) : $(MAIN_SERVER)
-	$(MAKE) -sC ./libft
-	@$(CC) $(CFLAGS) $(MAIN_SERVER) $(LIBFT) -o $(NAME_SERVER)
+$(NAME_SERVER): $(SRC_SERVER)
+	@$(MAKE) -sC ./libft
+	@echo "Creating $(NAME_SERVER)"
+	@$(CC) $(CFLAGS) $(SRC_SERVER) $(LIBFT) -o $(NAME_SERVER)
 
-# server : $(NAME_SERVER)
+clean :
+	$(MAKE) clean -sC ./libft
 
-# client : $(NAME_CLIENT)
-
-all : $(NAME_SERVER) $(NAME_CLIENT)
+fclean :
+	@$(MAKE) fclean -sC ./libft
+	@echo "Cleaning minitalk"
+	@rm -rf $(NAME_CLIENT)
+	@rm -rf $(NAME_SERVER)
 
 fnorm :
 	@$(MAKE) -s fclean
-	@python3 -m c_formatter_42 $(SRCS) $(SRCS_BONUS) */*.h
-	norminette $(SRCS) $(SRCS_BONUS) */*.h
+	@python3 -m c_formatter_42 $(SRC_CLIENT) $(SRC_SERVER) */*.h
+	norminette $(SRC_CLIENT) $(SRC_SERVER) */*.h
 
+re : fclean all
+
+.PHONY : clean fclean fnorm re all bonus%         

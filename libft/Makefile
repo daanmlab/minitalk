@@ -15,23 +15,26 @@ BOBJECTS = $(BSOURCES:.c=.o)
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
+ARFLAGS = r
 
 all: $(NAME)
 
 $(NAME): $(OBJECTS)
-	$(AR) -r $(NAME) $(OBJECTS)
+	@echo "creating libft.a"
+	@$(AR) $(ARFLAGS) $(NAME) $(OBJECTS)
 
 bonus: $(OBJECTS) $(BOBJECTS)
-	$(AR) -r $(NAME) $?
+	@$(AR) $(ARFLAGS) $(NAME) $?
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $?
 
 clean:
-	rm -f $(OBJECTS) $(BOBJECTS)
+	@echo "Cleaning $(NAME)"
+	@rm -f $(OBJECTS) $(BOBJECTS)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 
